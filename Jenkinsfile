@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Set the full path to your Python executable
-        PYTHON_EXE = 'C:\Users\Hp\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python\Python 3.14'
+        PYTHON_EXE = 'C:\Program Files\WindowsApps\PythonSoftwareFoundation.PythonManager_26.3.240.0_x64__3847v3x7pw1km'
     }
 
     stages {
