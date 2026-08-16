@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Set the full path to your Python executable
-        PYTHON_EXE = 'C:\Program Files\WindowsApps\PythonSoftwareFoundation.PythonManager_26.3.240.0_x64__3847v3x7pw1km'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -13,10 +8,10 @@ pipeline {
             }
         }
 
-        stage('Set Up Environment') {
+        stage('Set Up Environment & Install') {
             steps {
                 bat '''
-                    "%PYTHON_EXE%" -m venv venv
+                    python -m venv venv
                     call venv\\Scripts\\activate
                     python -m pip install --upgrade pip
                     pip install -r requirements.txt
