@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Point to your exact Python binary path
         PYTHON_PATH = 'C:\\Users\\Hp\\AppData\\Local\\Python\\bin\\python.exe'
     }
 
@@ -17,13 +16,18 @@ pipeline {
             steps {
                 bat '''
                     @echo off
-                    echo Setting up virtual environment...
+                    echo [1/3] Creating virtual environment...
                     if exist venv rmdir /s /q venv
                     "%PYTHON_PATH%" -m venv venv
-                    
-                    echo Installing required packages...
+
+                    echo [2/3] Upgrading pip...
                     venv\\Scripts\\python.exe -m pip install --upgrade pip
-                    venv\\Scripts\\python.exe -m pip install -r requirements.txt
+
+                    echo [3/3] Installing pytest, selenium, and webdriver-manager...
+                    venv\\Scripts\\python.exe -m pip install pytest selenium webdriver-manager
+                    
+                    echo Verifying pytest installation...
+                    venv\\Scripts\\python.exe -m pytest --version
                 '''
             }
         }
@@ -34,7 +38,7 @@ pipeline {
                     @echo off
                     if not exist reports mkdir reports
                     
-                    echo Running pytest...
+                    echo Running pytest test suite...
                     venv\\Scripts\\python.exe -m pytest tests/ --junitxml=reports/junit-report.xml
                 '''
             }
