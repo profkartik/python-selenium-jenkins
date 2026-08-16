@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        // Point to your exact Python binary path
         PYTHON_PATH = 'C:\\Users\\Hp\\AppData\\Local\\Python\\bin\\python.exe'
     }
 
@@ -12,18 +13,17 @@ pipeline {
             }
         }
 
-        stage('Set Up Virtual Environment & Dependencies') {
+        stage('Set Up Environment & Dependencies') {
             steps {
                 bat '''
                     @echo off
-                    echo Verifying Python executable...
-                    "%PYTHON_PATH%" --version
-
+                    echo Setting up virtual environment...
                     if exist venv rmdir /s /q venv
                     "%PYTHON_PATH%" -m venv venv
-                    call venv\\Scripts\\activate.bat
-                    python -m pip install --upgrade pip
-                    pip install -r requirements.txt
+                    
+                    echo Installing required packages...
+                    venv\\Scripts\\python.exe -m pip install --upgrade pip
+                    venv\\Scripts\\python.exe -m pip install -r requirements.txt
                 '''
             }
         }
@@ -32,9 +32,10 @@ pipeline {
             steps {
                 bat '''
                     @echo off
-                    call venv\\Scripts\\activate.bat
                     if not exist reports mkdir reports
-                    pytest tests/ --junitxml=reports/junit-report.xml
+                    
+                    echo Running pytest...
+                    venv\\Scripts\\python.exe -m pytest tests/ --junitxml=reports/junit-report.xml
                 '''
             }
         }
