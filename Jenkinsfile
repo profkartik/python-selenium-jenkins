@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Set the full path to your Python executable
+        PYTHON_EXE = 'C:\Users\Hp\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python\Python 3.14'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,10 +13,10 @@ pipeline {
             }
         }
 
-        stage('Set Up Environment & Install') {
+        stage('Set Up Environment') {
             steps {
                 bat '''
-                    python -m venv venv
+                    "%PYTHON_EXE%" -m venv venv
                     call venv\\Scripts\\activate
                     python -m pip install --upgrade pip
                     pip install -r requirements.txt
